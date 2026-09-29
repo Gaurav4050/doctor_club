@@ -609,9 +609,6 @@ export default function RegistrationForm({ onSuccess }) {
               </span>
             )}
           </button>
-          <p className="text-[11px] text-slate-400 mt-2.5">
-            🔒 Your data is stored safely in the association registry & backed up permanently.
-          </p>
         </div>
       </form>
     </div>

@@ -21,13 +21,16 @@ import {
   Lock,
   Compass,
   GraduationCap,
-  Activity
+  Activity,
+  Menu,
+  X
 } from 'lucide-react';
 import ClubEmblem from '@/components/ClubEmblem';
 import RegistrationForm from '@/components/RegistrationForm';
 
 export default function Home() {
   const [stats, setStats] = useState({ total: 240, personalClinics: 145, cities: 38 });
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     // Fetch live registration counts
@@ -114,15 +117,18 @@ export default function Home() {
       <div className="absolute bottom-[400px] left-0 w-[500px] h-[500px] bg-sky-600/10 blur-[130px] pointer-events-none" />
 
       {/* Top Navbar */}
-      <header className="sticky top-0 z-40 backdrop-blur-md bg-[#051020]/80 border-b border-white/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <ClubEmblem size={52} />
+      <header className="sticky top-0 z-40 backdrop-blur-md bg-[#051020]/90 border-b border-white/10">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="shrink-0 flex items-center">
+              <ClubEmblem size={38} className="sm:hidden" />
+              <ClubEmblem size={50} className="hidden sm:inline-flex" />
+            </div>
             <div>
-              <div className="font-heading font-black text-sm sm:text-base tracking-wider text-amber-300 leading-tight">
+              <div className="font-heading font-black text-xs sm:text-base tracking-wider text-amber-300 leading-tight">
                 ALL INDIA DOCTORS CLUB
               </div>
-              <div className="text-[10px] tracking-widest text-slate-300 uppercase font-semibold">
+              <div className="text-[9px] sm:text-[10px] tracking-widest text-slate-400 uppercase font-semibold leading-tight">
                 Association • Established for Doctors
               </div>
             </div>
@@ -135,15 +141,79 @@ export default function Home() {
             <a href="#registration-section" className="hover:text-amber-400 transition-colors">Member Registration</a>
           </nav>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <button
-              onClick={scrollToRegistration}
-              className="btn-gold text-xs sm:text-sm py-2.5 px-5 font-bold uppercase tracking-wider shadow-lg"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                scrollToRegistration();
+              }}
+              className="btn-gold text-[11px] sm:text-xs py-2 px-3 sm:py-2.5 sm:px-5 font-bold uppercase tracking-wider shadow-md whitespace-nowrap shrink-0 flex items-center gap-1.5"
             >
-              Join Club <ArrowRight size={15} />
+              <span>Join Club</span>
+              <ArrowRight size={13} className="shrink-0" />
+            </button>
+
+            {/* Mobile Hamburger Toggle Button */}
+            <button
+              onClick={() => setMobileMenuOpen(prev => !prev)}
+              className="md:hidden p-2 rounded-lg bg-slate-800/80 text-amber-300 border border-amber-400/20 hover:bg-slate-700 transition-colors"
+              aria-label="Toggle navigation menu"
+            >
+              {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
             </button>
           </div>
         </div>
+
+        {/* Mobile Navigation Drawer Dropdown */}
+        {mobileMenuOpen && (
+          <div className="md:hidden bg-[#071830]/98 border-b border-amber-400/25 px-5 py-4 space-y-3 backdrop-blur-xl">
+            <a
+              href="#about"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block py-2 text-xs font-bold uppercase tracking-wider text-slate-200 hover:text-amber-300 border-b border-white/5"
+            >
+              Our Vision
+            </a>
+            <a
+              href="#pillars"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block py-2 text-xs font-bold uppercase tracking-wider text-slate-200 hover:text-amber-300 border-b border-white/5"
+            >
+              Core Pillars
+            </a>
+            <a
+              href="#leadership"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block py-2 text-xs font-bold uppercase tracking-wider text-slate-200 hover:text-amber-300 border-b border-white/5"
+            >
+              Leadership & Founders
+            </a>
+            <a
+              href="#registration-section"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                scrollToRegistration();
+              }}
+              className="block py-2 text-xs font-bold uppercase tracking-wider text-amber-300 border-b border-white/5"
+            >
+              Doctor Registration Form
+            </a>
+            <div className="pt-2 flex flex-col gap-2 text-xs">
+              <a
+                href="tel:7374926939"
+                className="flex items-center gap-2 text-amber-400 font-semibold"
+              >
+                <Phone size={14} /> Founder Helpline: 7374926939
+              </a>
+              <a
+                href="tel:8696772312"
+                className="flex items-center gap-2 text-amber-400 font-semibold"
+              >
+                <Phone size={14} /> Co-Founder Helpline: 8696772312
+              </a>
+            </div>
+          </div>
+        )}
       </header>
 
       {/* Hero Section matching the Poster Theme */}

@@ -8,6 +8,11 @@ export const metadata = {
     title: "All India Doctors Club Association",
     description: "One Community | One Voice | One Goal - Created by Doctors, For Doctors.",
     type: "website",
+  },
+  icons: {
+    icon: '/icon.svg',
+    shortcut: '/icon.svg',
+    apple: '/icon.svg',
   }
 };
 

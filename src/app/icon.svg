@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+  <defs>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#FFF3B0" />
+      <stop offset="50%" stopColor="#F59E0B" />
+      <stop offset="100%" stopColor="#B45309" />
+    </linearGradient>
+    <linearGradient id="navy" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#0B2545" />
+      <stop offset="100%" stopColor="#051020" />
+    </linearGradient>
+  </defs>
+
+  <!-- Base Circular Crest -->
+  <circle cx="50" cy="50" r="48" fill="url(#navy)" stroke="url(#gold)" stroke-width="3.5" />
+  <circle cx="50" cy="50" r="42" fill="none" stroke="url(#gold)" stroke-width="1" stroke-dasharray="2 2" />
+
+  <!-- Caduceus Center Staff -->
+  <path d="M 50 18 L 50 82" stroke="url(#gold)" stroke-width="3" stroke-linecap="round" />
+  <circle cx="50" cy="18" r="3.5" fill="url(#gold)" />
+
+  <!-- Wings -->
+  <path d="M 50 24 C 36 12 24 22 20 30 C 26 34 38 30 50 26 C 62 30 74 34 80 30 C 76 22 64 12 50 24 Z" fill="url(#gold)" opacity="0.95" />
+
+  <!-- Entwined Snakes -->
+  <path d="M 38 42 C 32 34 46 30 50 28 C 54 34 68 42 62 50 C 56 58 44 58 38 66 C 32 74 46 78 50 80" fill="none" stroke="url(#gold)" stroke-width="2" stroke-linecap="round" />
+  <path d="M 62 42 C 68 34 54 30 50 28 C 46 34 32 42 38 50 C 44 58 56 58 62 66 C 68 74 54 78 50 80" fill="none" stroke="url(#gold)" stroke-width="2" stroke-linecap="round" />
+
+  <!-- Mini Doctor Silhouette in Center -->
+  <circle cx="50" cy="46" r="6" fill="#FFFFFF" />
+  <path d="M 37 66 C 37 54 63 54 63 66 Z" fill="#FFFFFF" />
+
+  <!-- Tiny Medical Cross at bottom -->
+  <rect x="47" y="86" width="6" height="2" fill="url(#gold)" rx="0.5" />
+  <rect x="49" y="84" width="2" height="6" fill="url(#gold)" rx="0.5" />
+</svg>
