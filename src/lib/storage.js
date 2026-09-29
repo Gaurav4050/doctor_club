@@ -7,7 +7,24 @@ const PRIMARY_FILE = path.join(DATA_DIR, 'registrations.json');
 const TMP_FILE = path.join('/tmp', 'registrations_backup.json');
 
 // Initial seed data with realistic dummy entries so user sees a rich UI immediately
+// Initial seed data with realistic doctor entries
 const INITIAL_SEED = [
+  {
+    id: "AIDC-2026-7206",
+    name: "Dr. Gaurav Rathore",
+    phone: "07742280279",
+    email: "gauravsinghrathorerathore+909@gmail.com",
+    batchYear: "2023",
+    city: "Udaipur",
+    state: "Rajasthan",
+    address: "Hotel Janak Niwas, Udaipur",
+    clinicName: "Anand Hospital",
+    clinicType: "Post-Graduate / Resident Doctor",
+    councilNo: "RMC/2023/7206",
+    specialization: "Orthopedics (MS / DNB Ortho)",
+    registrationDate: "2026-09-29T14:15:04.622Z",
+    status: "Registered Member"
+  },
   {
     id: "AIDC-2026-1001",
     name: "Dr. Ankit Jakhar",
@@ -45,6 +62,13 @@ const INITIAL_SEED = [
     status: "Verified Member"
   }
 ];
+
+// Helper to check if persistent cloud storage is configured
+export function isCloudConfigured() {
+  const kvUrl = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
+  const kvToken = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
+  return Boolean(kvUrl && kvToken);
+}
 
 // Helper to determine writeable file path
 function getFilePath() {
@@ -219,7 +243,8 @@ export async function saveRegistration(registrationData) {
     total: updatedList.length,
     storageStatus: {
       localSaved,
-      cloudSaved
+      cloudSaved,
+      cloudConfigured: isCloudConfigured()
     }
   };
 }

@@ -42,8 +42,10 @@ export default function AdminRegistrationsPage() {
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
   const [message, setMessage] = useState('');
+  const [cloudConfigured, setCloudConfigured] = useState(true);
+  const [showCloudGuide, setShowCloudGuide] = useState(false);
 
-  // Default Admin PIN is 1234, can also be unlocked if already authenticated in sessionStorage
+  // Default Admin PIN can be 3456 or 1234
   useEffect(() => {
     const savedAuth = sessionStorage.getItem('aidc_admin_auth');
     if (savedAuth === 'true') {
@@ -54,30 +56,95 @@ export default function AdminRegistrationsPage() {
 
   const handleUnlock = (e) => {
     e.preventDefault();
-    if (pin.trim() === '3456') {
+    const cleanPin = pin.trim();
+    if (cleanPin === '3456' || cleanPin === '1234') {
       setIsAuthenticated(true);
       sessionStorage.setItem('aidc_admin_auth', 'true');
       setPinError('');
       fetchData();
     } else {
-      setPinError('Incorrect PIN. Access Denied.');
+      setPinError('Incorrect PIN. Please enter 3456 or 1234.');
     }
   };
 
   const fetchData = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/admin/registrations');
+      const res = await fetch(`/api/admin/registrations?t=${Date.now()}`, {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache'
+        }
+      });
       const json = await res.json();
+      let serverList = [];
       if (json.success) {
-        setRegistrations(json.data || []);
-        setStats(json.stats || null);
+        serverList = json.data || [];
+        setCloudConfigured(Boolean(json.cloudConfigured));
+      }
+
+      // Check browser localStorage for registrations submitted from this browser
+      let localList = [];
+      try {
+        localList = JSON.parse(localStorage.getItem('aidc_registered_members') || '[]');
+      } catch (_) {}
+
+      // Merge server + local records, ensuring no duplicate phone numbers or IDs
+      const mergedMap = new Map();
+      serverList.forEach(item => {
+        const key = item.phone || item.id;
+        if (key) mergedMap.set(key, item);
+      });
+
+      const missingOnServer = [];
+      localList.forEach(item => {
+        const key = item.phone || item.id;
+        if (key && !mergedMap.has(key)) {
+          mergedMap.set(key, { ...item, _isLocalOnly: true });
+          missingOnServer.push(item);
+        }
+      });
+
+      const finalList = Array.from(mergedMap.values());
+      setRegistrations(finalList);
+
+      if (json.stats && missingOnServer.length === 0) {
+        setStats(json.stats);
+      } else {
+        setStats({
+          total: finalList.length,
+          personalClinics: finalList.filter(i => i.clinicType?.toLowerCase().includes('personal')).length,
+          hospitalAffiliated: finalList.filter(i => i.clinicType && !i.clinicType.toLowerCase().includes('personal')).length,
+          uniqueCities: [...new Set(finalList.map(i => i.city).filter(Boolean))].length,
+          batchDistribution: finalList.reduce((acc, i) => { if (i.batchYear) acc[i.batchYear] = (acc[i.batchYear] || 0) + 1; return acc; }, {})
+        });
+      }
+
+      // If local entries are missing on the server, auto-sync them to the server
+      if (missingOnServer.length > 0) {
+        syncLocalToServer(missingOnServer);
       }
     } catch (err) {
       console.error('Failed to load registrations:', err);
     } finally {
       setLoading(false);
     }
+  };
+
+  const syncLocalToServer = async (items) => {
+    try {
+      const res = await fetch('/api/admin/registrations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'sync', data: items })
+      });
+      const data = await res.json();
+      if (data.success && data.addedCount > 0) {
+        setMessage(`Synced ${data.addedCount} local registration(s) to server database!`);
+        setTimeout(() => setMessage(''), 4000);
+      }
+    } catch (_) {}
   };
 
   // Download raw JSON file
@@ -221,7 +288,7 @@ export default function AdminRegistrationsPage() {
             <div className="relative flex items-center">
               <input
                 type="password"
-                placeholder="Enter Secret Passcode (3456)"
+                placeholder="Enter Secret Passcode (3456 or 1234)"
                 value={pin}
                 onChange={(e) => setPin(e.target.value)}
                 autoFocus
@@ -312,21 +379,102 @@ export default function AdminRegistrationsPage() {
         {/* Persistence Notice Banner */}
         <div className="mt-4 p-3.5 rounded-xl bg-gradient-to-r from-blue-950/70 to-slate-900 border border-blue-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
           <div className="flex items-center gap-2.5">
-            <Database size={18} className="text-amber-400 shrink-0" />
+            <Database size={18} className={cloudConfigured ? "text-emerald-400 shrink-0" : "text-amber-400 shrink-0"} />
             <div>
-              <span className="font-bold text-amber-300">Permanent Data Guarantee: </span>
-              <span className="text-slate-300">
-                All records are written to <code>data/registrations.json</code>. You can also click <strong>&quot;Download JSON File&quot;</strong> anytime for 1-click offline backup.
-              </span>
+              {cloudConfigured ? (
+                <>
+                  <span className="font-bold text-emerald-300">Cloud Database Connected: </span>
+                  <span className="text-slate-300">
+                    Registrations are synchronized across all servers and devices permanently.
+                  </span>
+                </>
+              ) : (
+                <>
+                  <span className="font-bold text-amber-300">Serverless Local Mode: </span>
+                  <span className="text-slate-300">
+                    Data is stored in local JSON and browser storage. For multi-device cloud persistence on Vercel, connect free Upstash Redis.
+                  </span>
+                  <button
+                    onClick={() => setShowCloudGuide(true)}
+                    className="ml-2 text-amber-400 hover:text-amber-300 underline font-semibold cursor-pointer"
+                  >
+                    View 1-Min Guide
+                  </button>
+                </>
+              )}
             </div>
           </div>
-          <button
-            onClick={fetchData}
-            className="text-xs text-amber-400 hover:text-amber-300 flex items-center gap-1 shrink-0 font-medium"
-          >
-            <RefreshCw size={12} className={loading ? "animate-spin" : ""} /> Refresh List
-          </button>
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              onClick={fetchData}
+              className="text-xs text-amber-400 hover:text-amber-300 flex items-center gap-1 font-medium bg-amber-500/10 px-3 py-1.5 rounded-lg border border-amber-500/30 transition-all"
+            >
+              <RefreshCw size={12} className={loading ? "animate-spin" : ""} /> Refresh List
+            </button>
+          </div>
         </div>
+
+        {/* Cloud Guide Modal */}
+        {showCloudGuide && (
+          <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+            <div className="bg-[#0b172a] border border-amber-500/40 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative">
+              <div className="flex items-center justify-between pb-4 border-b border-white/10 mb-4">
+                <div className="flex items-center gap-2">
+                  <Database size={20} className="text-amber-400" />
+                  <h3 className="font-bold text-white text-base font-heading">
+                    Vercel Permanent Cloud Storage Setup (Free)
+                  </h3>
+                </div>
+                <button
+                  onClick={() => setShowCloudGuide(false)}
+                  className="text-slate-400 hover:text-white text-sm px-2 py-1 rounded"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <p className="text-slate-300 text-xs leading-relaxed mb-4">
+                Because Vercel serverless containers reset between executions, registrations saved on one serverless instance must be stored in a cloud database to be visible to all devices. Upstash Redis is 100% free forever (10,000 requests/day).
+              </p>
+
+              <div className="space-y-3 text-xs bg-slate-900/80 p-4 rounded-xl border border-white/5 mb-4">
+                <div className="flex gap-2.5 items-start">
+                  <span className="w-5 h-5 rounded-full bg-amber-500/20 text-amber-300 flex items-center justify-center font-bold shrink-0 text-[11px]">1</span>
+                  <div className="text-slate-200">
+                    Open your project dashboard on <a href="https://vercel.com" target="_blank" rel="noreferrer" className="text-amber-400 underline">vercel.com</a>.
+                  </div>
+                </div>
+                <div className="flex gap-2.5 items-start">
+                  <span className="w-5 h-5 rounded-full bg-amber-500/20 text-amber-300 flex items-center justify-center font-bold shrink-0 text-[11px]">2</span>
+                  <div className="text-slate-200">
+                    Click the <strong>Storage</strong> tab at the top &gt; Click <strong>Connect Store</strong> &gt; Select <strong>Upstash Redis</strong> (Free).
+                  </div>
+                </div>
+                <div className="flex gap-2.5 items-start">
+                  <span className="w-5 h-5 rounded-full bg-amber-500/20 text-amber-300 flex items-center justify-center font-bold shrink-0 text-[11px]">3</span>
+                  <div className="text-slate-200">
+                    Follow the prompt to connect. Vercel automatically injects <code>KV_REST_API_URL</code> and <code>KV_REST_API_TOKEN</code>!
+                  </div>
+                </div>
+                <div className="flex gap-2.5 items-start">
+                  <span className="w-5 h-5 rounded-full bg-amber-500/20 text-amber-300 flex items-center justify-center font-bold shrink-0 text-[11px]">4</span>
+                  <div className="text-slate-200">
+                    Redeploy the project. Every registration will now permanently sync across all devices!
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex justify-end">
+                <button
+                  onClick={() => setShowCloudGuide(false)}
+                  className="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-lg transition-all"
+                >
+                  Got It
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {message && (
           <div className="mt-3 p-3 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs flex items-center gap-2">

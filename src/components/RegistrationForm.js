@@ -131,6 +131,16 @@ export default function RegistrationForm({ onSuccess }) {
       const result = await response.json();
 
       if (response.ok && result.success) {
+        // Also persist in browser localStorage as an instant client backup
+        try {
+          const existingLocal = JSON.parse(localStorage.getItem('aidc_registered_members') || '[]');
+          const updatedLocal = [
+            result.data,
+            ...existingLocal.filter(item => item.phone !== result.data.phone && item.id !== result.data.id)
+          ];
+          localStorage.setItem('aidc_registered_members', JSON.stringify(updatedLocal));
+        } catch (_) {}
+
         setRegisteredData(result.data);
         if (onSuccess) onSuccess(result.data);
       } else {

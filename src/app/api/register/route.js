@@ -1,6 +1,15 @@
 import { NextResponse } from 'next/server';
 import { saveRegistration, getRegistrations } from '@/lib/storage';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
+const NO_CACHE_HEADERS = {
+  'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+  'Pragma': 'no-cache',
+  'Expires': '0',
+};
+
 export async function GET() {
   try {
     const list = await getRegistrations();
@@ -15,11 +24,11 @@ export async function GET() {
         clinicType: item.clinicType,
         registrationDate: item.registrationDate
       }))
-    });
+    }, { headers: NO_CACHE_HEADERS });
   } catch (error) {
     return NextResponse.json(
       { success: false, error: error.message },
-      { status: 500 }
+      { status: 500, headers: NO_CACHE_HEADERS }
     );
   }
 }
@@ -34,7 +43,7 @@ export async function POST(request) {
     if (!name || !phone || !email) {
       return NextResponse.json(
         { success: false, error: 'Name, Phone number, and Email are required.' },
-        { status: 400 }
+        { status: 400, headers: NO_CACHE_HEADERS }
       );
     }
 
@@ -52,12 +61,13 @@ export async function POST(request) {
       data: result.data,
       total: result.total,
       storageStatus: result.storageStatus
-    });
+    }, { headers: NO_CACHE_HEADERS });
   } catch (error) {
     console.error('Registration error:', error);
     return NextResponse.json(
       { success: false, error: 'Internal Server Error while saving registration.' },
-      { status: 500 }
+      { status: 500, headers: NO_CACHE_HEADERS }
     );
   }
 }
+
