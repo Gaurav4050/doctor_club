@@ -196,23 +196,24 @@ export default function RegistrationForm({ onSuccess }) {
         </div>
 
         {/* Digital Membership ID Card */}
-        <div className="id-card-print-target relative bg-gradient-to-br from-[#0c2447] via-[#091a33] to-[#040e1d] rounded-2xl border-2 border-amber-400/60 p-6 md:p-8 text-white shadow-2xl mb-8 overflow-hidden">
+        <div className="id-card-print-target relative bg-gradient-to-br from-[#0c2447] via-[#091a33] to-[#040e1d] rounded-2xl border-2 border-amber-400/60 p-4 sm:p-6 md:p-8 text-white shadow-2xl mb-8 overflow-hidden">
           {/* Card Header Strip */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-amber-400/25 pb-5">
-            <div className="flex items-center gap-3">
-              <ClubEmblem size={56} />
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 border-b border-amber-400/25 pb-4 sm:pb-5 text-center sm:text-left">
+            <div className="flex items-center gap-2.5 sm:gap-3">
+              <ClubEmblem size={44} className="sm:hidden shrink-0" />
+              <ClubEmblem size={56} className="hidden sm:inline-flex shrink-0" />
               <div>
-                <h3 className="font-heading font-black tracking-wide text-amber-300 text-base md:text-lg leading-tight">
+                <h3 className="font-heading font-black tracking-wide text-amber-300 text-sm sm:text-base md:text-lg leading-tight">
                   ALL INDIA DOCTORS CLUB
                 </h3>
-                <p className="text-[11px] font-semibold tracking-wider text-slate-300 uppercase">
+                <p className="text-[9px] sm:text-[11px] font-semibold tracking-wider text-slate-300 uppercase">
                   Association • Official Member Card
                 </p>
               </div>
             </div>
-            <div className="text-right flex sm:flex-col items-center sm:items-end gap-2 sm:gap-1">
+            <div className="flex items-center sm:flex-col sm:items-end gap-2 sm:gap-1">
               <span className="text-[10px] tracking-wider text-amber-200/70 font-mono uppercase">Member ID</span>
-              <span className="font-mono text-sm md:text-base font-bold px-2.5 py-1 bg-amber-400/10 border border-amber-400/40 text-amber-300 rounded-md">
+              <span className="font-mono text-xs sm:text-base font-bold px-2.5 py-1 bg-amber-400/10 border border-amber-400/40 text-amber-300 rounded-md">
                 {registeredData.id}
               </span>
             </div>
@@ -272,17 +273,17 @@ export default function RegistrationForm({ onSuccess }) {
         </div>
 
         {/* Action Controls */}
-        <div className="flex flex-wrap items-center justify-center gap-3 no-print">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 no-print w-full">
           <button
             onClick={handlePrint}
-            className="btn-gold text-sm py-2.5 px-5"
+            className="btn-gold text-xs sm:text-sm py-2.5 px-5 w-full sm:w-auto"
           >
             <Printer size={16} /> Print / Save PDF
           </button>
 
           <button
             onClick={handleShare}
-            className="btn-outline-gold text-sm py-2.5 px-5"
+            className="btn-outline-gold text-xs sm:text-sm py-2.5 px-5 w-full sm:w-auto justify-center"
           >
             <Share2 size={16} /> Share With Doctors
           </button>
@@ -305,7 +306,7 @@ export default function RegistrationForm({ onSuccess }) {
                 agreeTerms: true
               });
             }}
-            className="text-slate-400 hover:text-white text-xs px-4 py-2 flex items-center gap-1 transition-colors"
+            className="text-slate-400 hover:text-white text-xs px-4 py-2 flex items-center justify-center gap-1 transition-colors w-full sm:w-auto"
           >
             <RefreshCw size={14} /> Register Another Doctor
           </button>

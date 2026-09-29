@@ -164,92 +164,95 @@ body {
   animation: shimmer 4s ease-in-out infinite;
 }
 
-/* Inputs styling */
-.custom-input {
-  width: 100%;
-  background: rgba(8, 27, 56, 0.85);
-  border: 1.5px solid rgba(255, 255, 255, 0.15);
-  border-radius: 10px;
-  padding: 13px 16px;
-  color: #ffffff;
-  font-family: var(--font-body);
-  font-size: 0.96rem;
-  transition: all 0.25s ease;
-  outline: none;
-}
+@layer components {
+  /* Inputs styling */
+  .custom-input {
+    width: 100%;
+    background: rgba(8, 27, 56, 0.85);
+    border: 1.5px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    padding: 12px 16px;
+    color: #ffffff;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    transition: all 0.25s ease;
+    outline: none;
+  }
 
-.custom-input.with-icon {
-  padding-left: 44px !important;
-}
+  .custom-input.with-icon {
+    padding-left: 44px !important;
+  }
 
-.custom-input:focus {
-  border-color: #f59e0b;
-  background: rgba(11, 37, 69, 0.95);
-  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
-}
+  .custom-input:focus {
+    border-color: #f59e0b;
+    background: rgba(11, 37, 69, 0.95);
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+  }
 
-.custom-input::placeholder {
-  color: #64748b;
-}
+  .custom-input::placeholder {
+    color: #64748b;
+  }
 
-.custom-select {
-  appearance: none;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f59e0b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-  background-repeat: no-repeat;
-  background-position: right 14px center;
-  background-size: 16px;
-  padding-right: 42px !important;
-}
+  .custom-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f59e0b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 16px;
+    padding-right: 42px !important;
+  }
 
-.custom-select.with-icon {
-  padding-left: 44px !important;
-}
+  .custom-select.with-icon {
+    padding-left: 44px !important;
+  }
 
-/* Buttons */
-.btn-gold {
-  background: var(--gold-gradient);
-  color: #07172e;
-  font-weight: 700;
-  font-family: var(--font-body);
-  border: none;
-  border-radius: 9999px;
-  padding: 14px 30px;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  box-shadow: var(--shadow-gold);
-}
+  /* Buttons */
+  .btn-gold {
+    background: var(--gold-gradient);
+    color: #07172e;
+    font-weight: 700;
+    font-family: var(--font-body);
+    border: none;
+    border-radius: 9999px;
+    padding: 12px 24px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: var(--shadow-gold);
+  }
 
-.btn-gold:hover {
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 12px 28px rgba(245, 158, 11, 0.45);
-}
+  .btn-gold:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 12px 28px rgba(245, 158, 11, 0.45);
+  }
 
-.btn-gold:active {
-  transform: translateY(1px);
-}
+  .btn-gold:active {
+    transform: translateY(1px);
+  }
 
-.btn-outline-gold {
-  background: transparent;
-  color: #fbbf24;
-  border: 1.5px solid #fbbf24;
-  font-weight: 600;
-  border-radius: 9999px;
-  padding: 13px 26px;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
+  .btn-outline-gold {
+    background: transparent;
+    color: #fbbf24;
+    border: 1.5px solid #fbbf24;
+    font-weight: 600;
+    border-radius: 9999px;
+    padding: 11px 22px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
 
-.btn-outline-gold:hover {
-  background: rgba(251, 191, 36, 0.12);
-  color: #fff;
-  border-color: #fcd34d;
+  .btn-outline-gold:hover {
+    background: rgba(251, 191, 36, 0.12);
+    color: #fff;
+    border-color: #fcd34d;
+  }
 }
 
 /* Membership Card Certificate Print Styles */

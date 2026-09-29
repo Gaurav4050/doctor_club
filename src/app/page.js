@@ -117,18 +117,20 @@ export default function Home() {
       <div className="absolute bottom-[400px] left-0 w-[500px] h-[500px] bg-sky-600/10 blur-[130px] pointer-events-none" />
 
       {/* Top Navbar */}
+      {/* Top Navbar */}
       <header className="sticky top-0 z-40 backdrop-blur-md bg-[#051020]/90 border-b border-white/10">
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
-          <div className="flex items-center gap-2 sm:gap-3">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-2">
+          {/* Logo & Title */}
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
             <div className="shrink-0 flex items-center">
-              <ClubEmblem size={38} className="sm:hidden" />
-              <ClubEmblem size={50} className="hidden sm:inline-flex" />
+              <ClubEmblem size={36} className="sm:hidden" />
+              <ClubEmblem size={46} className="hidden sm:inline-flex" />
             </div>
-            <div>
-              <div className="font-heading font-black text-xs sm:text-base tracking-wider text-amber-300 leading-tight">
+            <div className="min-w-0">
+              <div className="font-heading font-black text-xs sm:text-base tracking-wide sm:tracking-wider text-amber-300 leading-tight truncate">
                 ALL INDIA DOCTORS CLUB
               </div>
-              <div className="text-[9px] sm:text-[10px] tracking-widest text-slate-400 uppercase font-semibold leading-tight">
+              <div className="text-[8px] sm:text-[10px] tracking-wider sm:tracking-widest text-slate-400 uppercase font-semibold leading-tight truncate">
                 Association • Established for Doctors
               </div>
             </div>
@@ -141,22 +143,35 @@ export default function Home() {
             <a href="#registration-section" className="hover:text-amber-400 transition-colors">Member Registration</a>
           </nav>
 
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
+            {/* Desktop Join Button */}
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
                 scrollToRegistration();
               }}
-              className="btn-gold text-[11px] sm:text-xs py-2 px-3 sm:py-2.5 sm:px-5 font-bold uppercase tracking-wider shadow-md whitespace-nowrap shrink-0 flex items-center gap-1.5"
+              className="btn-gold hidden sm:inline-flex text-xs py-2 px-4 font-bold uppercase tracking-wider shadow-md whitespace-nowrap items-center gap-1.5"
             >
               <span>Join Club</span>
               <ArrowRight size={13} className="shrink-0" />
             </button>
 
+            {/* Mobile Compact Join Button */}
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                scrollToRegistration();
+              }}
+              className="sm:hidden btn-gold py-1.5 px-3 text-[11px] font-bold uppercase tracking-wider shadow-sm whitespace-nowrap flex items-center gap-1"
+            >
+              <span>Join</span>
+              <ArrowRight size={12} className="shrink-0" />
+            </button>
+
             {/* Mobile Hamburger Toggle Button */}
             <button
               onClick={() => setMobileMenuOpen(prev => !prev)}
-              className="md:hidden p-2 rounded-lg bg-slate-800/80 text-amber-300 border border-amber-400/20 hover:bg-slate-700 transition-colors"
+              className="md:hidden p-2 rounded-lg bg-slate-800/80 text-amber-300 border border-amber-400/20 hover:bg-slate-700 transition-colors shrink-0"
               aria-label="Toggle navigation menu"
             >
               {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
@@ -166,7 +181,7 @@ export default function Home() {
 
         {/* Mobile Navigation Drawer Dropdown */}
         {mobileMenuOpen && (
-          <div className="md:hidden bg-[#071830]/98 border-b border-amber-400/25 px-5 py-4 space-y-3 backdrop-blur-xl">
+          <div className="md:hidden bg-[#071830]/98 border-b border-amber-400/25 px-5 py-4 space-y-3 backdrop-blur-xl animate-fadeIn">
             <a
               href="#about"
               onClick={() => setMobileMenuOpen(false)}
@@ -217,89 +232,90 @@ export default function Home() {
       </header>
 
       {/* Hero Section matching the Poster Theme */}
-      <section className="relative pt-12 pb-20 px-4 sm:px-6 lg:px-8 text-center max-w-6xl mx-auto">
+      <section className="relative pt-8 sm:pt-12 pb-16 sm:pb-20 px-3 sm:px-6 lg:px-8 text-center max-w-6xl mx-auto">
         {/* Poster Top Tagline */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/90 border border-amber-400/40 text-amber-300 text-xs sm:text-sm font-semibold mb-6 shadow-lg shadow-amber-500/10">
-          <HeartPulse size={16} className="text-amber-400 animate-pulse" />
-          <span>Stronger Together for a Better Tomorrow</span>
+        <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1 sm:px-4 sm:py-1.5 rounded-full bg-slate-900/90 border border-amber-400/40 text-amber-300 text-[11px] sm:text-sm font-semibold mb-5 sm:mb-6 shadow-lg shadow-amber-500/10 max-w-full">
+          <HeartPulse size={14} className="text-amber-400 animate-pulse shrink-0" />
+          <span className="truncate">Stronger Together for a Better Tomorrow</span>
         </div>
 
         {/* Association Crest Emblem */}
-        <div className="flex justify-center mb-6 relative">
+        <div className="flex justify-center mb-5 sm:mb-6 relative">
           <div className="relative group">
             <div className="absolute inset-0 bg-amber-400/20 rounded-full blur-2xl group-hover:bg-amber-400/30 transition-all" />
-            <ClubEmblem size={170} className="relative z-10" />
+            <ClubEmblem size={120} className="sm:hidden relative z-10" />
+            <ClubEmblem size={170} className="hidden sm:inline-flex relative z-10" />
           </div>
         </div>
 
         {/* Main Ribbon Title from Poster */}
-        <div className="relative inline-block max-w-4xl mx-auto my-3">
-          <div className="py-2.5 px-6 sm:px-12 banner-ribbon rounded-xl transform -skew-x-2">
-            <h1 className="font-heading font-black text-2xl sm:text-4xl md:text-5xl tracking-wide text-slate-950 leading-none">
+        <div className="relative inline-block max-w-4xl mx-auto my-2 sm:my-3 px-2 w-full sm:w-auto">
+          <div className="py-2 sm:py-2.5 px-3 sm:px-12 banner-ribbon rounded-xl transform -skew-x-1 sm:-skew-x-2">
+            <h1 className="font-heading font-black text-xl sm:text-4xl md:text-5xl tracking-wide text-slate-950 leading-tight">
               ALL INDIA DOCTORS CLUB
             </h1>
-            <div className="text-base sm:text-2xl font-black tracking-widest text-[#06162d] mt-1">
+            <div className="text-xs sm:text-2xl font-black tracking-widest text-[#06162d] mt-0.5 sm:mt-1">
               A S S O C I A T I O N
             </div>
           </div>
         </div>
 
         {/* Poster Subtitle */}
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-xs sm:text-sm font-bold tracking-wider text-slate-300 uppercase">
+        <div className="mt-4 sm:mt-6 flex flex-wrap items-center justify-center gap-1.5 sm:gap-4 text-[11px] sm:text-sm font-bold tracking-wider text-slate-300 uppercase px-2">
           <span className="text-amber-400">Created by Doctors</span>
-          <span className="text-slate-600">•</span>
+          <span className="text-slate-600 hidden sm:inline">•</span>
           <span className="text-amber-400">For Doctors</span>
-          <span className="text-slate-600">•</span>
+          <span className="text-slate-600 hidden sm:inline">•</span>
           <span className="text-amber-400">For a Stronger Medical Community</span>
         </div>
 
         {/* Hero Narrative Description */}
-        <p className="mt-5 text-sm sm:text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed font-normal">
+        <p className="mt-4 sm:mt-5 text-xs sm:text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed font-normal px-2">
           The sovereign fraternal association safeguarding healthcare professionals, resident doctors, private practitioners, and medical officers across India. From clinical safety to medico-legal support and collective brotherhood.
         </p>
 
         {/* Hero Actions */}
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+        <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 px-4 sm:px-0">
           <button
             onClick={scrollToRegistration}
-            className="btn-gold text-base py-3.5 px-8 font-extrabold uppercase tracking-wider"
+            className="btn-gold text-sm sm:text-base py-3 sm:py-3.5 px-6 sm:px-8 font-extrabold uppercase tracking-wider w-full sm:w-auto"
           >
-            Register as Doctor Member <ArrowRight size={18} />
+            Register as Doctor Member <ArrowRight size={16} />
           </button>
 
           <a
             href="#leadership"
-            className="btn-outline-gold text-sm py-3 px-6 font-semibold"
+            className="btn-outline-gold text-xs sm:text-sm py-2.5 sm:py-3 px-5 sm:px-6 font-semibold w-full sm:w-auto justify-center"
           >
             Meet the Founders
           </a>
         </div>
 
         {/* Live Statistics Counter Strip */}
-        <div className="mt-14 max-w-3xl mx-auto grid grid-cols-3 gap-3 p-4 sm:p-6 rounded-2xl glass-panel border border-white/10 text-center">
-          <div className="border-r border-white/10">
-            <div className="text-2xl sm:text-3xl font-extrabold text-amber-400 font-heading">
+        <div className="mt-10 sm:mt-14 max-w-3xl mx-auto grid grid-cols-3 gap-1 sm:gap-3 p-3 sm:p-6 rounded-2xl glass-panel border border-white/10 text-center">
+          <div className="border-r border-white/10 px-1 sm:px-4">
+            <div className="text-xl sm:text-3xl font-extrabold text-amber-400 font-heading">
               {stats.total}+
             </div>
-            <div className="text-[11px] sm:text-xs text-slate-400 uppercase font-semibold mt-1">
+            <div className="text-[10px] sm:text-xs text-slate-400 uppercase font-semibold mt-1">
               Registered Doctors
             </div>
           </div>
 
-          <div className="border-r border-white/10">
-            <div className="text-2xl sm:text-3xl font-extrabold text-cyan-400 font-heading">
+          <div className="border-r border-white/10 px-1 sm:px-4">
+            <div className="text-xl sm:text-3xl font-extrabold text-cyan-400 font-heading">
               100%
             </div>
-            <div className="text-[11px] sm:text-xs text-slate-400 uppercase font-semibold mt-1">
+            <div className="text-[10px] sm:text-xs text-slate-400 uppercase font-semibold mt-1">
               Doctor-Run Body
             </div>
           </div>
 
-          <div>
-            <div className="text-2xl sm:text-3xl font-extrabold text-emerald-400 font-heading">
+          <div className="px-1 sm:px-4">
+            <div className="text-xl sm:text-3xl font-extrabold text-emerald-400 font-heading">
               24/7
             </div>
-            <div className="text-[11px] sm:text-xs text-slate-400 uppercase font-semibold mt-1">
+            <div className="text-[10px] sm:text-xs text-slate-400 uppercase font-semibold mt-1">
               Doctor Helpline
             </div>
           </div>
